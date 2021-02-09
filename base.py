@@ -57,7 +57,7 @@ def bubble_sort2(lis):
 # 选择排序1(o(n^2))
 def select_sort1(lis):
     result = []
-    for i in range(lis):
+    for i in range(len(lis)):
         min_val = min(lis)  # 该操作是o(n)
         result.append(min_val)
         lis.remove(min_val)
