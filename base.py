@@ -108,13 +108,109 @@ def patition(lis, left, right):
     lis[left] = tmp
     return left
         
-# 堆排序
+# 堆排序(基于完全二叉树)
+# 1. 建立堆
+# 2. 得到堆顶元素，为最大元素
+# 3. 去掉堆顶，将堆最后一个元素放到堆顶，可通过一次自上而下的调整使堆有序
+# 4. 堆顶元素为第二大元素
+# 5. 重复步骤三，知道堆变空
+
+def shift(lis, low, high):
+    i = low  # 最开始指向的根节点
+    j = 2 * i + 1  # 根节点的左孩子
+    tmp = lis[low]  # 把堆顶节点存起来
+    while j <= high:  # 只要j位置有数
+        if j + 1 <= high and lis[j+1] > lis[j]:  # 右节点存在且比左节点大
+            j += 1  # j指向右孩子
+        if lis[j] > tmp: 
+            lis[i] = lis[j]
+            i = j  # 往下看一层
+            j = 2 * i + 1 
+        else:
+            break
+    lis[i] = tmp  # 把tmp放到叶子节点
+
+def heap_sort(lis):
+    n = len(lis)
+    # 构建堆
+    for i in range((n-2)//2, -1, -1):
+        # i 表示构建小堆时候的根节点的下标
+        shift(lis, i, n-1) # j超过high就必然会超过n-1
+    # 出数
+    for i in range(n-1, -1, -1):
+        # i 指向当前堆的最后一个元素
+        lis[0], lis[i] = lis[i], lis[0]
+        shift(lis, 0, i-1)  # i - 1 为当前堆的最后一个元素
+
+
+# python内置堆排序
+import heapq
+import random
+
+lis = list(random(100))
+random.shuffle(lis)
+
+heapq.heapify(lis)  # 构建堆
+n = len(lis)
+for i in range(n):
+    heapq.heappop(lis)  # 出数
+
+
+# topK问题
+## 排序切片： O(nlogn)
+## 排序lowB三人组：O(kn)
+## 堆排序： O(nlogk)
+
+# 堆排序topk
+# 先建小根堆
+def shift(lis, low, high):
+    i = low  # 最开始指向的根节点
+    j = 2 * i + 1  # 根节点的左孩子
+    tmp = lis[low]  # 把堆顶节点存起来
+    while j <= high:  # 只要j位置有数
+        if j + 1 <= high and lis[j+1] < lis[j]:  # 右节点存在且比左节点大
+            j += 1  # j指向右孩子
+        if lis[j] < tmp: 
+            lis[i] = lis[j]
+            i = j  # 往下看一层
+            j = 2 * i + 1 
+        else:
+            break
+    lis[i] = tmp  # 把tmp放到叶子节点
+
+def heap_topk_sort(lis):
+    heap = lis[0:k]
+    # 构建堆
+    for i in range((k-2)//2, -1, -1):
+        shift(lis, i, k-1) 
+    # 遍历
+    for i in range(k, len(lis) - 1):
+        if lis[i] > heap[0]:
+            heap[0] = lis[i]
+            shift(lis, 0, k-1)
+    # 出数
+    for i in range(k-1, -1, -1):
+        heap[0], heap[i] = heap[i], heap[0]
+        shift(heap, 0, i-1)  
+    return heap
 
 
 
 
-############## 二叉树 ##############
-# 二叉树定义
+
+
+
+
+
+
+
+
+############## 树 ##############
+
+# 树的高度(深度)：树的层数
+# 树的度：所有节点中度(孩子数量)最大的节点的度
+# 二叉树定义：所有节点的度不超过二
+# 完全二叉树：叶子节点从左边开始
 class BiTreeNode:
     def __init__(self, data):
         self.data = data
@@ -182,15 +278,31 @@ def level_order(root):
             queue.append(node.rchild)
 
 
-
-
-
-
-
-
-
-
-
+############## 动态规划 ##############
+# 1. 确定状态
+#    - 研究最优策略的最后一步
+#    - 转化为子问题
+# 2. 状态转移方程
+#
+#    - 根据子问题定义直接得到
+# 3. 考虑初始条件和边界情况
+#
+# 4. 计算顺序
+#    - 自底而上地计算结果 
+#
+# 5. 常见的动态规划类型：
+#    - 坐标型动态规划
+#    - 序列型动态规划
+#    - 划分型动态规划 
+#    - 区间型动态规划
+#    - 背包型动态规划
+#    - 最长序列型动态规划
+#    - 博弈型动态规划
+#    - 综合型动态规划
+#
+# 6. 其他：
+#    - 动态规划时间空间优化
+#    - 动态规划路径打印
 
 
 
